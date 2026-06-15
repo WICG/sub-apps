@@ -118,6 +118,7 @@ dictionary SubAppsListResult {
 - **Returned Object**: `SubAppsAddResponse` contains records mapping each input `InstallURL` provided to the call to either its success or failure state. Developers must use the `InstallURL` key to identify which call failed and which succeeded:
   - `installedApps`: A record mapping the `InstallURL` to the successfully installed sub-app's `ManifestId`. `ManifestId` is a stable identified of a sub app, it is later used in `subApps.remove` and `subApps.list` calls. For what is `ManifestId` exactly, please, consult [Sub App identity](#sub-app-identity) section.
   - `failedApps`: A record mapping the `InstallURL` to a `DOMException` explaining why that individual sub-app failed to install. Possible exceptions include:
+    - `ConstraintError`: Provided sub app scope web manifest property overlaps with scopes of other sub apps or the parent app or the provided install url pointed to the app web manifest (itself).
     - `DataError`: The referenced web manifest was invalid or could not be parsed.
     - `InvalidStateError`: The sub-app is already installed.
     - `OperationError`: A generic system or database failure occurred during the installation of this specific sub-app.
