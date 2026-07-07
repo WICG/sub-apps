@@ -116,7 +116,7 @@ dictionary SubAppsListResult {
 - **Returned Object**: `SubAppsAddResponse` contains records mapping each input `InstallPath` provided to the call to either its success or failure state. Developers must use the `InstallPath` key to identify which call failed and which succeeded:
   - `installedApps`: A record mapping the `InstallPath` to the successfully installed sub-app's `ManifestId`. `ManifestId` is a stable identified of a sub app, it is later used in `subApps.remove` and `subApps.list` calls. For what is `ManifestId` exactly, please, consult [Sub App identity](#sub-app-identity) section.
   - `failedApps`: A record mapping the `InstallPath` to a `DOMException` explaining why that individual sub-app failed to install. Possible exceptions include:
-    - `ConstraintError`: Provided sub app scope web manifest property overlaps with scopes of other sub apps or the parent app or the provided install url pointed to the app web manifest (itself).
+    - `ConstraintError`: Provided sub app scope is a prefix of another sub app's scope (or vice versa), or the parent app's scope is a prefix of the sub app's scope, or the provided install url pointed to the parent app's web manifest (itself).
     - `DataError`: The referenced web manifest was invalid or could not be parsed.
     - `InvalidStateError`: The sub-app is already installed.
     - `OperationError`: A generic system or database failure occurred during the installation of this specific sub-app.
@@ -314,14 +314,14 @@ Two distinct options were considered for the return types of the `add()` and `re
 
 ### Sub App Identity
 
-Sub apps rely on standard web manifest identity fields, but enforce specific isolation and overlap rules to guarantee they do not conflict with each other or the parent application.
+Sub apps rely on standard web manifest identity fields, but enforce specific isolation and scope validation rules to guarantee they do not conflict with each other or the parent application.
 
 | Identifier | Relationship to Parent / Generation Rule |
 | :--- | :--- |
 | **Origin** | Identical to the parent IWA. |
 | **SignedWebBundleId** | Identical to the parent IWA. |
 | **Start URL** | Must be defined in the web manifest. Must be unique between sub-apps and the parent app. |
-| **Scope** | Might be defined in the web manifest. Scopes must not overlap between sub-apps. The scope of a sub-app must not overlap with or cover the parent app's scope. Otherwise, the installation/update fails. |
+| **Scope** | Might be defined in the web manifest. Scopes of sub apps must not be a prefix of one another, and scope of the parent app must not be prefix of sub app scope. Otherwise, the installation/update fails. |
 | **URL** | Parent IWA origin + `/` + `sub_app_start_url`. *Example:* `isolated-app://pl2ctdpnkf7ltse22mpjdb376etd3ydo7s72lgspuopgzcwl5tkqaaic/sub/calculator.html` |
 | **AppId** | It is unique between all apps of a particular user (regardless if it is a sub app or usual app). It is derived from ManifestId. |
 | **ManifestId** | Unique for each sub app. Defined in the web manifest, if it is empty, it falls back to the `start_url` without the reference/hash fragment. *Example:* `/sub/calculator.html` |
