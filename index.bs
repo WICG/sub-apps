@@ -133,11 +133,11 @@ The {{SubApps/add(install_paths)}} method steps are:
 
 1. If |currentSubAppsCount| + {{SubApps/add(install_paths)/install_paths}}'s [=list/size=] is greater than 20, [=reject=] |promise| with a "{{QuotaExceededError}}" {{DOMException}} and return |promise|.
 
-1. Let |userConsent| be the result of requesting user consent for installing the sub-apps in {{SubApps/add(install_paths)/install_paths}} (e.g. by presenting a unified installation dialog).
-
-1. If |userConsent| is denied, [=reject=] |promise| with a "{{NotAllowedError}}" {{DOMException}} and return |promise|.
-
 1. Run the following steps [=in parallel=]:
+
+    1. Let |userConsent| be the result of requesting user consent for installing the sub-apps in {{SubApps/add(install_paths)/install_paths}} (e.g. by presenting a unified installation dialog).
+
+    1. If |userConsent| is denied, [=Queue a global task=] on the [=relevant global object=] of [=this=] to [=reject=] |promise| with a "{{NotAllowedError}}" {{DOMException}}, and abort these steps.
 
     1. Let |installedApps| be an empty map.
 
