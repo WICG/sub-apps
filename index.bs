@@ -21,6 +21,7 @@ Boilerplate: conformance-tests no
 
 <pre class="link-defaults">
 spec:html; type:element; text:link
+spec:appmanifest; type:dfn; text:manifest
 </pre>
 
 Introduction {#intro}
@@ -33,6 +34,19 @@ The Sub Apps API allows a parent application to programmatically install, list, 
 1. Share the underlying resources, origin, storage, permissions, and update lifecycle of the parent application.
 
 This API is restricted to [=isolated contexts=] to ensure security and data integrity.
+
+Concepts {#concepts}
+====================
+
+An [=installed web application=] has an associated <dfn for="installed web application">parent app</dfn>, which is either null or an [=installed web application=].
+
+An [=installed web application=] has an associated <dfn for="installed web application">sub-apps set</dfn>, which is a [=set=] of [=installed web application=]s.
+
+A {{Document}} can have an <dfn>associated installed web application</dfn>, which is the [=installed web application=] that the {{Document}} is presented as part of. The exact mechanism for this association is implementation-defined.
+
+The <dfn>associated parent app</dfn> of a {{Document}} |document| is its [=associated installed web application=]'s [=installed web application/parent app=] if that is not null, or its [=associated installed web application=] otherwise.
+
+A {{Document}} is a <dfn>sub-app document</dfn> if it has an [=associated installed web application=] and its [=associated installed web application=]'s [=installed web application/parent app=] is not null.
 
 Extensions to the {{Window}} interface {#window-extensions}
 =======================================================
@@ -83,8 +97,6 @@ dictionary SubAppsListResult {
 };
 </xmp>
 
-Each application has a primary application context (the parent app). A {{Document}} is a <dfn>sub-app document</dfn> if it is not loaded within the primary application context of the parent app.
-
 A string |path| is a <dfn>valid relative path</dfn> for a {{Document}} |document| if all of the following conditions are met:
 
 1. |path| is not a valid absolute URL.
@@ -115,15 +127,17 @@ The {{SubApps/add(install_paths)}} method steps are:
 
     1. If |installPath| is not a [=valid relative path=] for the [=relevant global object=]'s [=associated Document=], [=reject=] |promise| with a "{{TypeError}}" {{DOMException}} and return |promise|.
 
-    1. Let |absoluteUrl| be the result of parsing |installPath| with the parent app's [=origin=] as the base URL.
+    1. Let |absoluteUrl| be the result of parsing |installPath| with the [=relevant global object=]'s [=associated Document=]'s [=origin=] as the base URL.
 
     1. If |absoluteUrl| is failure, [=reject=] |promise| with a "{{TypeError}}" {{DOMException}} and return |promise|.
 
     1. Append |absoluteUrl| to |parsedUrls|.
 
-1. Let |parentApp| be the parent app.
+1. Let |parentApp| be the [=relevant global object=]'s [=associated Document=]'s [=associated parent app=].
 
-1. Let |currentSubAppsCount| be the number of sub-apps currently installed for |parentApp|.
+1. If |parentApp| is null, [=reject=] |promise| with a "{{NotSupportedError}}" {{DOMException}} and return |promise|.
+
+1. Let |currentSubAppsCount| be the [=set/size|size=] of |parentApp|'s [=installed web application/sub-apps set=].
 
 1. If |currentSubAppsCount| + {{SubApps/add(install_paths)/install_paths}}'s [=list/size=] is greater than 20, [=reject=] |promise| with a "{{QuotaExceededError}}" {{DOMException}} and return |promise|.
 
@@ -177,7 +191,7 @@ The {{SubApps/add(install_paths)}} method steps are:
 
             1. [=iteration/continue|Continue=].
 
-        1. If the [=manifest/scope=] of |parentApp| is a [=code unit prefix|prefix=] of the [=manifest/scope=], or the |manifest|'s [=manifest/scope=] is a [=code unit prefix|prefix=] of the [=manifest/scope=]  of any currently installed sub-app under |parentApp|, or the [=manifest/scope=]  of any currently installed sub-app under |parentApp| is a [=code unit prefix|prefix=] of the |manifest|'s [=manifest/scope=], or the |absoluteUrl| points to |parentApp|'s manifest itself, perform the following steps:
+        1. If the [=manifest/scope=] of |parentApp|'s [=manifest=] is a [=code unit prefix|prefix=] of the |manifest|'s [=manifest/scope=], or the |manifest|'s [=manifest/scope=] is a [=code unit prefix|prefix=] of the [=manifest/scope=] of any currently installed sub-app in |parentApp|'s [=installed web application/sub-apps set=], or the [=manifest/scope=] of any currently installed sub-app in |parentApp|'s [=installed web application/sub-apps set=] is a [=code unit prefix|prefix=] of the |manifest|'s [=manifest/scope=], or the |absoluteUrl| points to |parentApp|'s [=manifest=] itself, perform the following steps:
 
             1. [=map/set|Set=] |failedApps|[|installPath|] to a new "{{ConstraintError}}" {{DOMException}}.
 
@@ -211,13 +225,17 @@ The {{SubApps/remove(manifest_ids)}} method steps are:
 
 1. If the [=relevant global object=]'s [=associated Document=] is a [=sub-app document=], [=reject=] |promise| with a "{{NotSupportedError}}" {{DOMException}} and return |promise|.
 
+1. Let |parentApp| be the [=relevant global object=]'s [=associated Document=]'s [=associated parent app=].
+
+1. If |parentApp| is null, [=reject=] |promise| with a "{{NotSupportedError}}" {{DOMException}} and return |promise|.
+
 1. Let |parsedManifestIds| be an empty list.
 
 1. [=list/iterate|For each=] |manifestId| in {{SubApps/remove(manifest_ids)/manifest_ids}}:
 
     1. If |manifestId| is not a [=valid relative path=] for the [=relevant global object=]'s [=associated Document=], [=reject=] |promise| with a "{{TypeError}}" {{DOMException}} and return |promise|.
 
-    1. Let |parsedUrl| be the result of parsing |manifestId| with the parent app's [=origin=] as the base URL.
+    1. Let |parsedUrl| be the result of parsing |manifestId| with the [=relevant global object=]'s [=associated Document=]'s [=origin=] as the base URL.
 
     1. If |parsedUrl| is failure, [=reject=] |promise| with a "{{TypeError}}" {{DOMException}} and return |promise|.
 
@@ -233,7 +251,7 @@ The {{SubApps/remove(manifest_ids)}} method steps are:
 
         1. Let |manifestId| be |parsedUrl|'s [=url/path=].
 
-        1. If |manifestId| does not exist under the parent app, perform the following steps:
+        1. If |manifestId| does not exist under |parentApp|, perform the following steps:
 
             1. [=map/set|Set=] |failedApps|[|manifestId|] to a new "{{NotFoundError}}" {{DOMException}}.
 
@@ -267,11 +285,15 @@ The {{SubApps/list()}} method steps are:
 
 1. If the [=relevant global object=]'s [=associated Document=] is a [=sub-app document=], [=reject=] |promise| with a "{{NotSupportedError}}" {{DOMException}} and return |promise|.
 
+1. Let |parentApp| be the [=relevant global object=]'s [=associated Document=]'s [=associated parent app=].
+
+1. If |parentApp| is null, [=reject=] |promise| with a "{{NotSupportedError}}" {{DOMException}} and return |promise|.
+
 1. Run the following steps [=in parallel=]:
 
     1. Let |listResult| be an empty map.
 
-    1. Retrieve the list of all currently installed sub-apps for the parent app from the platform registry.
+    1. Retrieve the list of all currently installed sub-apps for |parentApp| from the platform registry.
 
     1. If retrieving the list fails due to a platform error, [=Queue a global task=] on the [=relevant global object=] of [=this=] to [=reject=] |promise| with an "{{OperationError}}" {{DOMException}}, and abort these steps.
 
