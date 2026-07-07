@@ -155,7 +155,7 @@ The {{SubApps/add(install_paths)}} method steps are:
 
             1. [=iteration/continue|Continue=].
 
-        1. If the [=manifest/scope=] of |parentApp| is a prefix of the [=manifest/scope=], or the |manifest|'s [=manifest/scope=] is a prefix of the [=manifest/scope=]  of any currently installed sub-app under |parentApp|, or the [=manifest/scope=]  of any currently installed sub-app under |parentApp| is a prefix of the |manifest|'s [=manifest/scope=], or the |absoluteUrl| points to |parentApp|'s manifest itself, perform the following steps:
+        1. If the [=manifest/scope=] of |parentApp| is a [=code unit prefix|prefix=] of the [=manifest/scope=], or the |manifest|'s [=manifest/scope=] is a [=code unit prefix|prefix=] of the [=manifest/scope=]  of any currently installed sub-app under |parentApp|, or the [=manifest/scope=]  of any currently installed sub-app under |parentApp| is a [=code unit prefix|prefix=] of the |manifest|'s [=manifest/scope=], or the |absoluteUrl| points to |parentApp|'s manifest itself, perform the following steps:
 
             1. Add a mapping from |installPath| to a new "{{ConstraintError}}" {{DOMException}} to |failedApps|.
 
