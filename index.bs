@@ -117,7 +117,7 @@ The {{SubApps/add(install_paths)}} method steps are:
 
 1. Let |parsedUrls| be an empty list.
 
-1. For each |installPath| in {{SubApps/add(install_paths)/install_paths}}:
+1. [=list/iterate|For each=] |installPath| in {{SubApps/add(install_paths)/install_paths}}:
 
     1. If |installPath| is not a [=valid relative path=] for the [=relevant global object=]'s [=associated Document=], [=reject=] |promise| with a "{{TypeError}}" {{DOMException}} and return |promise|.
 
@@ -143,7 +143,7 @@ The {{SubApps/add(install_paths)}} method steps are:
 
     1. Let |failedApps| be an empty map.
 
-    1. For each |absoluteUrl| in |parsedUrls|:
+    1. [=list/iterate|For each=] |absoluteUrl| in |parsedUrls|:
 
         1. Let |installPath| be the relative path portion of |absoluteUrl|.
 
@@ -153,7 +153,7 @@ The {{SubApps/add(install_paths)}} method steps are:
 
             1. Add a mapping from |installPath| to a new "{{DataError}}" {{DOMException}} to |failedApps|.
 
-            1. Continue.
+            1. [=iteration/continue|Continue=].
 
         1. Let |manifest| be the parsed web manifest.
 
@@ -163,13 +163,13 @@ The {{SubApps/add(install_paths)}} method steps are:
 
             1. Add a mapping from |installPath| to a new "{{InvalidStateError}}" {{DOMException}} to |failedApps|.
 
-            1. Continue.
+            1. [=iteration/continue|Continue=].
 
-        1. If the scope of |manifest| overlaps with the scope of |parentApp|, or the scope of |manifest| overlaps with any currently installed sub-app's scope under |parentApp|, or the |absoluteUrl| points to |parentApp|'s manifest itself, perform the following steps:
+        1. If the [=manifest/scope=] of |parentApp| is a prefix of the [=manifest/scope=], or the |manifest|'s [=manifest/scope=] is a prefix of the [=manifest/scope=]  of any currently installed sub-app under |parentApp|, or the [=manifest/scope=]  of any currently installed sub-app under |parentApp| is a prefix of the |manifest|'s [=manifest/scope=], or the |absoluteUrl| points to |parentApp|'s manifest itself, perform the following steps:
 
             1. Add a mapping from |installPath| to a new "{{ConstraintError}}" {{DOMException}} to |failedApps|.
 
-            1. Continue.
+            1. [=iteration/continue|Continue=].
 
         1. Try to install the sub-app on the platform's application launcher.
 
@@ -177,7 +177,7 @@ The {{SubApps/add(install_paths)}} method steps are:
 
             1. Add a mapping from |installPath| to a new "{{OperationError}}" {{DOMException}} to |failedApps|.
 
-            1. Continue.
+            1. [=iteration/continue|Continue=].
 
         1. Add a mapping from |installPath| to |manifestId| to |installedApps|.
 
@@ -201,7 +201,7 @@ The {{SubApps/remove(manifest_ids)}} method steps are:
 
 1. Let |parsedManifestIds| be an empty list.
 
-1. For each |manifestId| in {{SubApps/remove(manifest_ids)/manifest_ids}}:
+1. [=list/iterate|For each=] |manifestId| in {{SubApps/remove(manifest_ids)/manifest_ids}}:
 
     1. If |manifestId| is not a [=valid relative path=] for the [=relevant global object=]'s [=associated Document=], [=reject=] |promise| with a "{{TypeError}}" {{DOMException}} and return |promise|.
 
@@ -217,7 +217,7 @@ The {{SubApps/remove(manifest_ids)}} method steps are:
 
     1. Let |failedApps| be an empty map.
 
-    1. For each |parsedUrl| in |parsedManifestIds|:
+    1. [=list/iterate|For each=] |parsedUrl| in |parsedManifestIds|:
 
         1. Let |manifestId| be the relative path portion of |parsedUrl|.
 
@@ -225,7 +225,7 @@ The {{SubApps/remove(manifest_ids)}} method steps are:
 
             1. Add a mapping from |manifestId| to a new "{{NotFoundError}}" {{DOMException}} to |failedApps|.
 
-            1. Continue.
+            1. [=iteration/continue|Continue=].
 
         1. Attempt to uninstall the sub-app with ID |manifestId| from the system launcher and registry.
 
@@ -233,7 +233,7 @@ The {{SubApps/remove(manifest_ids)}} method steps are:
 
             1. Add a mapping from |manifestId| to a new "{{OperationError}}" {{DOMException}} to |failedApps|.
 
-            1. Continue.
+            1. [=iteration/continue|Continue=].
 
         1. Append |manifestId| to |removedApps|.
 
@@ -263,7 +263,7 @@ The {{SubApps/list()}} method steps are:
 
     1. If retrieving the list fails due to a platform error, [=Queue a global task=] on the [=relevant global object=] of [=this=] to [=reject=] |promise| with an "{{OperationError}}" {{DOMException}}, and abort these steps.
 
-    1. For each installed sub-app |subApp|:
+    1. [=list/iterate|For each=] installed sub-app |subApp|:
 
         1. Let |manifestId| be |subApp|'s manifest ID.
 
