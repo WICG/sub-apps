@@ -57,10 +57,15 @@ partial interface Window {
 };
 </xmp>
 
-## {{Window/subApps}} attribute ## {#window-subapps}
+## {{Window/subApps}} attribute ## {#window-subapps-attribute}
 
-When getting, the {{Window/subApps}} attribute always returns the same
-instance of the {{SubApps}} object.
+Each {{Window}} object has an associated <dfn for=Window>subApps</dfn>, which is a {{SubApps}} instance created alongside the {{Window}}.
+
+<div algorithm>
+    The <dfn attribute for=Window>subApps</dfn> getter steps are:
+
+    1. Return [=this=]'s [=Window/subApps=].
+</div>
 
 {{SubApps}} interface {#subapps-interface}
 ==========================================
