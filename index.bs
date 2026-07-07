@@ -135,7 +135,7 @@ The {{SubApps/add(install_paths)}} method steps are:
 
     1. [=list/iterate|For each=] |absoluteUrl| in |parsedUrls|:
 
-        1. Let |installPath| be the relative path portion of |absoluteUrl|.
+        1. Let |installPath| be |absoluteUrl|'s [=url/path=].
 
         1. Fetch the resource at |absoluteUrl| and parse its web manifest [[!APPMANIFEST]].
 
@@ -209,7 +209,7 @@ The {{SubApps/remove(manifest_ids)}} method steps are:
 
     1. [=list/iterate|For each=] |parsedUrl| in |parsedManifestIds|:
 
-        1. Let |manifestId| be the relative path portion of |parsedUrl|.
+        1. Let |manifestId| be |parsedUrl|'s [=url/path=].
 
         1. If |manifestId| does not exist under the parent app, perform the following steps:
 
