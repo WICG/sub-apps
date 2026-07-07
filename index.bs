@@ -255,9 +255,9 @@ The {{SubApps/list()}} method steps are:
 
     1. [=list/iterate|For each=] installed sub-app |subApp|:
 
-        1. Let |manifestId| be |subApp|'s manifest ID.
+        1. Let |manifestId| be |subApp|'s [=manifest/id=].
 
-        1. Let |appName| be the name of the sub-app as extracted from its web manifest.
+        1. Let |appName| be the [=manifest/name=] of the sub-app as extracted from its web manifest.
 
         1. Let |resultEntry| be a new {{SubAppsListResult}} dictionary with `appName` set to |appName|.
 
