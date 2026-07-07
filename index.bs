@@ -141,7 +141,7 @@ The {{SubApps/add(install_paths)}} method steps are:
 
         1. If fetching or parsing the web manifest fails, perform the following steps:
 
-            1. Add a mapping from |installPath| to a new "{{DataError}}" {{DOMException}} to |failedApps|.
+            1. [=map/set|Set=] |failedApps|[|installPath|] to a new "{{DataError}}" {{DOMException}}.
 
             1. [=iteration/continue|Continue=].
 
@@ -151,13 +151,13 @@ The {{SubApps/add(install_paths)}} method steps are:
 
         1. If |parentApp| already has a sub-app with |manifestId| installed, perform the following steps:
 
-            1. Add a mapping from |installPath| to a new "{{InvalidStateError}}" {{DOMException}} to |failedApps|.
+            1. [=map/set|Set=] |failedApps|[|installPath|] to a new "{{InvalidStateError}}" {{DOMException}}.
 
             1. [=iteration/continue|Continue=].
 
         1. If the [=manifest/scope=] of |parentApp| is a [=code unit prefix|prefix=] of the [=manifest/scope=], or the |manifest|'s [=manifest/scope=] is a [=code unit prefix|prefix=] of the [=manifest/scope=]  of any currently installed sub-app under |parentApp|, or the [=manifest/scope=]  of any currently installed sub-app under |parentApp| is a [=code unit prefix|prefix=] of the |manifest|'s [=manifest/scope=], or the |absoluteUrl| points to |parentApp|'s manifest itself, perform the following steps:
 
-            1. Add a mapping from |installPath| to a new "{{ConstraintError}}" {{DOMException}} to |failedApps|.
+            1. [=map/set|Set=] |failedApps|[|installPath|] to a new "{{ConstraintError}}" {{DOMException}}.
 
             1. [=iteration/continue|Continue=].
 
@@ -165,11 +165,11 @@ The {{SubApps/add(install_paths)}} method steps are:
 
         1. If the installation fails due to a system or database error:
 
-            1. Add a mapping from |installPath| to a new "{{OperationError}}" {{DOMException}} to |failedApps|.
+            1. [=map/set|Set=] |failedApps|[|installPath|] to a new "{{OperationError}}" {{DOMException}}.
 
             1. [=iteration/continue|Continue=].
 
-        1. Add a mapping from |installPath| to |manifestId| to |installedApps|.
+        1. [=map/set|Set=] |installedApps|[|installPath|] to |manifestId|.
 
     1. Let |response| be a new {{SubAppsAddResponse}} dictionary with:
         - `installedApps` set to |installedApps|.
@@ -213,7 +213,7 @@ The {{SubApps/remove(manifest_ids)}} method steps are:
 
         1. If |manifestId| does not exist under the parent app, perform the following steps:
 
-            1. Add a mapping from |manifestId| to a new "{{NotFoundError}}" {{DOMException}} to |failedApps|.
+            1. [=map/set|Set=] |failedApps|[|manifestId|] to a new "{{NotFoundError}}" {{DOMException}}.
 
             1. [=iteration/continue|Continue=].
 
@@ -221,7 +221,7 @@ The {{SubApps/remove(manifest_ids)}} method steps are:
 
         1. If uninstallation fails due to a system error, perform the following steps:
 
-            1. Add a mapping from |manifestId| to a new "{{OperationError}}" {{DOMException}} to |failedApps|.
+            1. [=map/set|Set=] |failedApps|[|manifestId|] to a new "{{OperationError}}" {{DOMException}}.
 
             1. [=iteration/continue|Continue=].
 
@@ -261,7 +261,7 @@ The {{SubApps/list()}} method steps are:
 
         1. Let |resultEntry| be a new {{SubAppsListResult}} dictionary with `appName` set to |appName|.
 
-        1. Add a mapping from |manifestId| to |resultEntry| to |listResult|.
+        1. [=map/set|Set=] |listResult|[|manifestId|] to |resultEntry|.
 
     1. [=Queue a global task=] on the [=relevant global object=] of [=this=] to [=resolve=] |promise| with |listResult|.
 
