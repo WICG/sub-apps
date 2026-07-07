@@ -19,22 +19,7 @@ Include Can I Use Panels: yes
 Boilerplate: conformance-tests no
 </pre>
 
-<pre class="link-defaults">
-spec:infra; type:dfn; text:map
-spec:infra; type:dfn; text:list/size
-spec:html; type:dfn; text:allowed to use
-spec:webidl; type:dfn; text:a new promise
-spec:webidl; type:dfn; text:resolve
-spec:webidl; type:dfn; text:reject
-spec:html; type:dfn; text:in parallel
-spec:html; type:dfn; text:origin
-spec:html; type:dfn; text:relevant global object
-spec:html; type:dfn; text:associated document
-spec:html; type:dfn; text:queue a global task
-spec:html; type:dfn; text:document
-spec:html; type:dfn; text:fully active
-spec:html; type:dfn; text:parse a url
-</pre>
+
 
 Introduction {#intro}
 =====================
