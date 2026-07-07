@@ -19,7 +19,9 @@ Include Can I Use Panels: yes
 Boilerplate: conformance-tests no
 </pre>
 
-
+<pre class="link-defaults">
+spec:html; type:element; text:link
+</pre>
 
 Introduction {#intro}
 =====================
@@ -99,6 +101,8 @@ A string |path| is a <dfn>valid relative path</dfn> for a {{Document}} |document
 
 The {{SubApps/add(install_paths)}} method steps are:
 
+<p class="note">The {{SubApps/add(install_paths)/install_paths}} argument is a list of relative paths pointing to the sub-apps' start HTML pages.</p>
+
 1. Let |promise| be [=a new promise=].
 
 1. If the [=relevant global object=]'s [=associated Document=] is not [=allowed to use=] the [=policy-controlled feature=] named "[=policy-controlled feature/sub-apps=]", [=reject=] |promise| with a "{{SecurityError}}" {{DOMException}} and return |promise|.
@@ -137,15 +141,33 @@ The {{SubApps/add(install_paths)}} method steps are:
 
         1. Let |installPath| be |absoluteUrl|'s [=url/path=].
 
-        1. Fetch the resource at |absoluteUrl| and parse its web manifest [[!APPMANIFEST]].
+        1. Let |htmlRequest| be a new [=request=] whose [=request/url=] is |absoluteUrl|, [=request/client=] is the [=relevant settings object=] of [=this=], and [=request/destination=] is "`document`".
 
-        1. If fetching or parsing the web manifest fails, perform the following steps:
+        1. Let |htmlResponse| be the result of [=fetch|fetching=] |htmlRequest|.
 
+        1. If |htmlResponse| is a [=network error=], perform the following steps:
             1. [=map/set|Set=] |failedApps|[|installPath|] to a new "{{DataError}}" {{DOMException}}.
-
             1. [=iteration/continue|Continue=].
 
-        1. Let |manifest| be the parsed web manifest.
+        1. Let |document| be the HTML document obtained by parsing |htmlResponse|'s [=response/body=].
+
+        1. Let |manifestUrl| be the URL obtained by resolving the `href` attribute of the first <{link}> element whose `rel` attribute contains "`manifest`" inside |document|.
+
+        1. If the <{link}> element is not found, or |manifestUrl| is failure, perform the following steps:
+            1. [=map/set|Set=] |failedApps|[|installPath|] to a new "{{DataError}}" {{DOMException}}.
+            1. [=iteration/continue|Continue=].
+
+        1. Let |manifestRequest| be a new [=request=] whose [=request/url=] is |manifestUrl|, [=request/client=] is the [=relevant settings object=] of [=this=], and [=request/destination=] is "`manifest`".
+
+        1. Let |manifestResponse| be the result of [=fetch|fetching=] |manifestRequest|.
+
+        1. If |manifestResponse| is a [=network error=], perform the following steps:
+            1. [=map/set|Set=] |failedApps|[|installPath|] to a new "{{DataError}}" {{DOMException}}.
+            1. [=iteration/continue|Continue=].
+
+        1. Let |bodyBytes| be the [=byte sequence=] of |manifestResponse|'s [=response/body=].
+
+        1. Let |manifest| be the result of [=processing a manifest=] given [=this=]'s [=relevant global object=]'s [=associated Document=]'s [=Document/URL=], |manifestUrl|, |bodyBytes|, and the [=relevant settings object=] of [=this=].
 
         1. Let |manifestId| be |manifest|'s [=manifest/id=]. If it is not defined, fall back to |manifest|'s [=manifest/start_url=] (without reference/hash fragment).
 
