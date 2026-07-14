@@ -72,13 +72,16 @@ Each {{Window}} object has an associated <dfn for=Window>subApps</dfn>, which is
 ==========================================
 
 <xmp class="idl">
+// Represents the https://w3c.github.io/manifest/#id-member
+typedef USVString ManifestId;
+
 dictionary SubAppsAddResponse {
-  record<USVString, USVString> installedApps;
+  record<USVString, ManifestId> installedApps;
   record<USVString, DOMException> failedApps;
 };
 
 dictionary SubAppsRemoveResponse {
-  sequence<USVString> removedApps;
+  sequence<ManifestId> removedApps;
   record<USVString, DOMException> failedApps;
 };
 
@@ -92,7 +95,7 @@ dictionary SubAppsListResult {
   IsolatedContext
 ] interface SubApps {
   Promise<SubAppsAddResponse> add(sequence<USVString> install_paths);
-  Promise<SubAppsRemoveResponse> remove(sequence<USVString> manifest_ids);
+  Promise<SubAppsRemoveResponse> remove(sequence<ManifestId> manifest_ids);
   Promise<record<USVString, SubAppsListResult>> list();
 };
 </xmp>
@@ -216,6 +219,8 @@ The {{SubApps/add(install_paths)}} method steps are:
 1. Return |promise|.
 
 ## {{SubApps/remove()}} method ## {#subapps-remove}
+
+<p class="note">The {{SubApps/remove(manifest_ids)/manifest_ids}} argument is a list of [=manifest/id=]s of the sub-apps to remove.</p>
 
 The {{SubApps/remove(manifest_ids)}} method steps are:
 
