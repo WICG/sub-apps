@@ -4,8 +4,8 @@ Shortname: sub-apps
 Level: None
 Status: UD
 Group: wicg
-Repository: explainers-by-googlers/sub-apps
-URL: https://explainers-by-googlers.github.io/sub-apps
+Repository: WICG/sub-apps
+URL: https://WICG.github.io/sub-apps
 Editor: Vlad Krot, Google https://google.com, vkrot@google.com
 Abstract: The Sub Apps API allows a parent application context to programmatically install, list, and remove auxiliary applications sharing the parent's origin, storage, and lifecycle bounds, while presenting distinct names, icons, and window identities to the operating system.
 Markup Shorthands: markdown yes, css no
@@ -158,33 +158,11 @@ The {{SubApps/add(install_paths)}} method steps are:
 
         1. Let |installPath| be |absoluteUrl|'s [=url/path=].
 
-        1. Let |htmlRequest| be a new [=request=] whose [=request/url=] is |absoluteUrl|, [=request/client=] is the [=relevant settings object=] of [=this=], and [=request/destination=] is "`document`".
+        1. Let |manifest| be the result of [=fetch and process the manifest=] given |absoluteUrl|.
 
-        1. Let |htmlResponse| be the result of [=fetch|fetching=] |htmlRequest|.
-
-        1. If |htmlResponse| is a [=network error=], perform the following steps:
+        1. If |manifest| is failure, perform the following steps:
             1. [=map/set|Set=] |failedApps|[|installPath|] to a new "{{DataError}}" {{DOMException}}.
             1. [=iteration/continue|Continue=].
-
-        1. Let |document| be the HTML document obtained by parsing |htmlResponse|'s [=response/body=].
-
-        1. Let |manifestUrl| be the URL obtained by resolving the `href` attribute of the first <{link}> element whose `rel` attribute contains "`manifest`" inside |document|.
-
-        1. If the <{link}> element is not found, or |manifestUrl| is failure, perform the following steps:
-            1. [=map/set|Set=] |failedApps|[|installPath|] to a new "{{DataError}}" {{DOMException}}.
-            1. [=iteration/continue|Continue=].
-
-        1. Let |manifestRequest| be a new [=request=] whose [=request/url=] is |manifestUrl|, [=request/client=] is the [=relevant settings object=] of [=this=], and [=request/destination=] is "`manifest`".
-
-        1. Let |manifestResponse| be the result of [=fetch|fetching=] |manifestRequest|.
-
-        1. If |manifestResponse| is a [=network error=], perform the following steps:
-            1. [=map/set|Set=] |failedApps|[|installPath|] to a new "{{DataError}}" {{DOMException}}.
-            1. [=iteration/continue|Continue=].
-
-        1. Let |bodyBytes| be the [=byte sequence=] of |manifestResponse|'s [=response/body=].
-
-        1. Let |manifest| be the result of [=processing a manifest=] given [=this=]'s [=relevant global object=]'s [=associated Document=]'s [=Document/URL=], |manifestUrl|, |bodyBytes|, and the [=relevant settings object=] of [=this=].
 
         1. Let |manifestId| be |manifest|'s [=manifest/id=]. If it is not defined, fall back to |manifest|'s [=manifest/start_url=] (without reference/hash fragment).
 
@@ -315,6 +293,14 @@ The {{SubApps/list()}} method steps are:
     1. [=Queue a global task=] on the [=relevant global object=] of [=this=] to [=resolve=] |promise| with |listResult|.
 
 1. Return |promise|.
+
+## Fetch and process the manifest ## {#fetch-and-process-manifest}
+
+Issue(2): write the "fetch and process the manifest" algorithm.
+
+To <dfn>fetch and process the manifest</dfn> given a <var ignore>url</var> (a [=URL=]), run the following steps:
+
+1. Return failure.
 
 Security and Privacy Considerations {#security-privacy}
 ======================================================
