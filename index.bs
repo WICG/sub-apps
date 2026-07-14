@@ -211,8 +211,8 @@ The {{SubApps/add(install_paths)}} method steps are:
         1. [=map/set|Set=] |installedApps|[|installPath|] to |manifestId|.
 
     1. Let |response| be a new {{SubAppsAddResponse}} dictionary with:
-        - `installedApps` set to |installedApps|.
-        - `failedApps` set to |failedApps|.
+        - [=SubAppsAddResponse/installedApps=] set to |installedApps|.
+        - [=SubAppsAddResponse/failedApps=] set to |failedApps|.
 
     1. [=Queue a global task=] on the [=relevant global object=] of [=this=] to [=resolve=] |promise| with |response|.
 
@@ -273,8 +273,8 @@ The {{SubApps/remove(manifest_ids)}} method steps are:
         1. Append |manifestId| to |removedApps|.
 
     1. Let |response| be a new {{SubAppsRemoveResponse}} dictionary with:
-        - `removedApps` set to |removedApps|.
-        - `failedApps` set to |failedApps|.
+        - [=SubAppsRemoveResponse/removedApps=] set to |removedApps|.
+        - [=SubAppsRemoveResponse/failedApps=] set to |failedApps|.
 
     1. [=Queue a global task=] on the [=relevant global object=] of [=this=] to [=resolve=] |promise| with |response|.
 
@@ -308,7 +308,7 @@ The {{SubApps/list()}} method steps are:
 
         1. Let |appName| be the [=manifest/name=] of the sub-app as extracted from its web manifest.
 
-        1. Let |resultEntry| be a new {{SubAppsListResult}} dictionary with `appName` set to |appName|.
+        1. Let |resultEntry| be a new {{SubAppsListResult}} dictionary with [=SubAppsListResult/appName=] set to |appName|.
 
         1. [=map/set|Set=] |listResult|[|manifestId|] to |resultEntry|.
 
