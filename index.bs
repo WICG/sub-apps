@@ -107,7 +107,7 @@ A string |path| is a <dfn>valid relative path</dfn> for a {{Document}} |document
 
 1. |path| does not start with `"//"`.
 
-1. The result of [=parse a url|parsing=] |path| with |document|'s [=origin=] as the base URL is not failure.
+1. The result of [=parse a url|parsing=] |path| with |document|'s [=Document/origin=] as the base URL is not failure.
 
 ## {{SubApps/add()}} method ## {#subapps-add}
 
