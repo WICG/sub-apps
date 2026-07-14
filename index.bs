@@ -120,23 +120,25 @@ The {{SubApps/add(install_paths)}} method steps are:
 
 1. Let |promise| be [=a new promise=].
 
-1. If the [=relevant global object=]'s [=associated Document=] is not [=allowed to use=] the [=policy-controlled feature=] named "[=policy-controlled feature/sub-apps=]", [=reject=] |promise| with a "{{SecurityError}}" {{DOMException}} and return |promise|.
+1. Let |document| be the [=relevant global object=]'s [=associated Document=].
 
-1. If the [=relevant global object=]'s [=associated Document=] is a [=sub-app document=], [=reject=] |promise| with a "{{NotSupportedError}}" {{DOMException}} and return |promise|.
+1. If |document| is not [=allowed to use=] the [=policy-controlled feature=] named "[=policy-controlled feature/sub-apps=]", [=reject=] |promise| with a "{{SecurityError}}" {{DOMException}} and return |promise|.
+
+1. If |document| is a [=sub-app document=], [=reject=] |promise| with a "{{NotSupportedError}}" {{DOMException}} and return |promise|.
 
 1. Let |parsedUrls| be an empty list.
 
 1. [=list/iterate|For each=] |installPath| in {{SubApps/add(install_paths)/install_paths}}:
 
-    1. If |installPath| is not a [=valid relative path=] for the [=relevant global object=]'s [=associated Document=], [=reject=] |promise| with a "{{TypeError}}" {{DOMException}} and return |promise|.
+    1. If |installPath| is not a [=valid relative path=] for |document|, [=reject=] |promise| with a "{{TypeError}}" {{DOMException}} and return |promise|.
 
-    1. Let |absoluteUrl| be the result of parsing |installPath| with the [=relevant global object=]'s [=associated Document=]'s [=origin=] as the base URL.
+    1. Let |absoluteUrl| be the result of parsing |installPath| with |document|'s [=origin=] as the base URL.
 
     1. If |absoluteUrl| is failure, [=reject=] |promise| with a "{{TypeError}}" {{DOMException}} and return |promise|.
 
     1. Append |absoluteUrl| to |parsedUrls|.
 
-1. Let |parentApp| be the [=relevant global object=]'s [=associated Document=]'s [=associated parent app=].
+1. Let |parentApp| be |document|'s [=associated parent app=].
 
 1. If |parentApp| is null, [=reject=] |promise| with a "{{NotSupportedError}}" {{DOMException}} and return |promise|.
 
@@ -144,11 +146,13 @@ The {{SubApps/add(install_paths)}} method steps are:
 
 1. If |currentSubAppsCount| + {{SubApps/add(install_paths)/install_paths}}'s [=list/size=] is greater than 20, [=reject=] |promise| with a "{{QuotaExceededError}}" {{DOMException}} and return |promise|.
 
+1. Let |subApps| be [=this=].
+
 1. Run the following steps [=in parallel=]:
 
     1. Let |userConsent| be the result of requesting user consent for installing the sub-apps in {{SubApps/add(install_paths)/install_paths}} (e.g. by presenting a unified installation dialog).
 
-    1. If |userConsent| is denied, [=queue a global task=] on the [=relevant global object=] of [=this=] to [=reject=] |promise| with a "{{NotAllowedError}}" {{DOMException}}, and abort these steps.
+    1. If |userConsent| is denied, [=queue a global task=] on the [=relevant global object=] of |subApps| to [=reject=] |promise| with a "{{NotAllowedError}}" {{DOMException}}, and abort these steps.
 
     1. Let |installedApps| be an empty map.
 
@@ -192,7 +196,7 @@ The {{SubApps/add(install_paths)}} method steps are:
         - {{SubAppsAddResponse/installedApps}} set to |installedApps|.
         - {{SubAppsAddResponse/failedApps}} set to |failedApps|.
 
-    1. [=Queue a global task=] on the [=relevant global object=] of [=this=] to [=resolve=] |promise| with |response|.
+    1. [=Queue a global task=] on the [=relevant global object=] of |subApps| to [=resolve=] |promise| with |response|.
 
 1. Return |promise|.
 
@@ -204,11 +208,13 @@ The {{SubApps/remove(manifest_ids)}} method steps are:
 
 1. Let |promise| be [=a new promise=].
 
-1. If the [=relevant global object=]'s [=associated Document=] is not [=allowed to use=] the [=policy-controlled feature=] named "[=policy-controlled feature/sub-apps=]", [=reject=] |promise| with a "{{SecurityError}}" {{DOMException}} and return |promise|.
+1. Let |document| be the [=relevant global object=]'s [=associated Document=].
 
-1. If the [=relevant global object=]'s [=associated Document=] is a [=sub-app document=], [=reject=] |promise| with a "{{NotSupportedError}}" {{DOMException}} and return |promise|.
+1. If |document| is not [=allowed to use=] the [=policy-controlled feature=] named "[=policy-controlled feature/sub-apps=]", [=reject=] |promise| with a "{{SecurityError}}" {{DOMException}} and return |promise|.
 
-1. Let |parentApp| be the [=relevant global object=]'s [=associated Document=]'s [=associated parent app=].
+1. If |document| is a [=sub-app document=], [=reject=] |promise| with a "{{NotSupportedError}}" {{DOMException}} and return |promise|.
+
+1. Let |parentApp| be |document|'s [=associated parent app=].
 
 1. If |parentApp| is null, [=reject=] |promise| with a "{{NotSupportedError}}" {{DOMException}} and return |promise|.
 
@@ -216,13 +222,15 @@ The {{SubApps/remove(manifest_ids)}} method steps are:
 
 1. [=list/iterate|For each=] |manifestId| in {{SubApps/remove(manifest_ids)/manifest_ids}}:
 
-    1. If |manifestId| is not a [=valid relative path=] for the [=relevant global object=]'s [=associated Document=], [=reject=] |promise| with a "{{TypeError}}" {{DOMException}} and return |promise|.
+    1. If |manifestId| is not a [=valid relative path=] for |document|, [=reject=] |promise| with a "{{TypeError}}" {{DOMException}} and return |promise|.
 
-    1. Let |parsedUrl| be the result of parsing |manifestId| with the [=relevant global object=]'s [=associated Document=]'s [=origin=] as the base URL.
+    1. Let |parsedUrl| be the result of parsing |manifestId| with |document|'s [=origin=] as the base URL.
 
     1. If |parsedUrl| is failure, [=reject=] |promise| with a "{{TypeError}}" {{DOMException}} and return |promise|.
 
     1. Append |parsedUrl| to |parsedManifestIds|.
+
+1. Let |subApps| be [=this=].
 
 1. Run the following steps [=in parallel=]:
 
@@ -254,7 +262,7 @@ The {{SubApps/remove(manifest_ids)}} method steps are:
         - {{SubAppsRemoveResponse/removedApps}} set to |removedApps|.
         - {{SubAppsRemoveResponse/failedApps}} set to |failedApps|.
 
-    1. [=Queue a global task=] on the [=relevant global object=] of [=this=] to [=resolve=] |promise| with |response|.
+    1. [=Queue a global task=] on the [=relevant global object=] of |subApps| to [=resolve=] |promise| with |response|.
 
 1. Return |promise|.
 
@@ -264,13 +272,17 @@ The {{SubApps/list()}} method steps are:
 
 1. Let |promise| be [=a new promise=].
 
-1. If the [=relevant global object=]'s [=associated Document=] is not [=allowed to use=] the [=policy-controlled feature=] named "[=policy-controlled feature/sub-apps=]", [=reject=] |promise| with a "{{SecurityError}}" {{DOMException}} and return |promise|.
+1. Let |document| be the [=relevant global object=]'s [=associated Document=].
 
-1. If the [=relevant global object=]'s [=associated Document=] is a [=sub-app document=], [=reject=] |promise| with a "{{NotSupportedError}}" {{DOMException}} and return |promise|.
+1. If |document| is not [=allowed to use=] the [=policy-controlled feature=] named "[=policy-controlled feature/sub-apps=]", [=reject=] |promise| with a "{{SecurityError}}" {{DOMException}} and return |promise|.
 
-1. Let |parentApp| be the [=relevant global object=]'s [=associated Document=]'s [=associated parent app=].
+1. If |document| is a [=sub-app document=], [=reject=] |promise| with a "{{NotSupportedError}}" {{DOMException}} and return |promise|.
+
+1. Let |parentApp| be |document|'s [=associated parent app=].
 
 1. If |parentApp| is null, [=reject=] |promise| with a "{{NotSupportedError}}" {{DOMException}} and return |promise|.
+
+1. Let |subApps| be [=this=].
 
 1. Run the following steps [=in parallel=]:
 
@@ -278,7 +290,7 @@ The {{SubApps/list()}} method steps are:
 
     1. Retrieve the list of all currently installed sub-apps for |parentApp| from the platform registry.
 
-    1. If retrieving the list fails due to a platform error, [=Queue a global task=] on the [=relevant global object=] of [=this=] to [=reject=] |promise| with an "{{OperationError}}" {{DOMException}}, and abort these steps.
+    1. If retrieving the list fails due to a platform error, [=Queue a global task=] on the [=relevant global object=] of |subApps| to [=reject=] |promise| with an "{{OperationError}}" {{DOMException}}, and abort these steps.
 
     1. [=list/iterate|For each=] installed sub-app |subApp|:
 
@@ -290,7 +302,7 @@ The {{SubApps/list()}} method steps are:
 
         1. [=map/set|Set=] |listResult|[|manifestId|] to |resultEntry|.
 
-    1. [=Queue a global task=] on the [=relevant global object=] of [=this=] to [=resolve=] |promise| with |listResult|.
+    1. [=Queue a global task=] on the [=relevant global object=] of |subApps| to [=resolve=] |promise| with |listResult|.
 
 1. Return |promise|.
 
