@@ -42,11 +42,11 @@ An [=installed web application=] has an associated <dfn for="installed web appli
 
 An [=installed web application=] has an associated <dfn for="installed web application">sub-apps set</dfn>, which is a [=set=] of [=installed web application=]s.
 
-A {{Document}} can have an <dfn>associated installed web application</dfn>, which is the [=installed web application=] that the {{Document}} is presented as part of. The exact mechanism for this association is implementation-defined.
+A {{Document}} has an <dfn for=Document>associated installed web application</dfn>, which is the [=installed web application=] that the {{Document}} is presented as part of. The exact mechanism for this association is [=implementation-defined=].
 
-The <dfn>associated parent app</dfn> of a {{Document}} |document| is its [=associated installed web application=]'s [=installed web application/parent app=] if that is not null, or its [=associated installed web application=] otherwise.
+The <dfn for=Document>associated parent app</dfn> of a {{Document}} |document| is its [=Document/associated installed web application=]'s [=installed web application/parent app=] if that is not null, or its [=Document/associated installed web application=] otherwise.
 
-A {{Document}} is a <dfn>sub-app document</dfn> if it has an [=associated installed web application=] and its [=associated installed web application=]'s [=installed web application/parent app=] is not null.
+A {{Document}} is a <dfn for=Document>sub-app document</dfn> if it has an [=Document/associated installed web application=] and its [=Document/associated installed web application=]'s [=installed web application/parent app=] is not null.
 
 Extensions to the {{Window}} interface {#window-extensions}
 =======================================================
@@ -124,7 +124,7 @@ The {{SubApps/add(install_paths)}} method steps are:
 
 1. If |document| is not [=allowed to use=] the [=policy-controlled feature=] named "[=policy-controlled feature/sub-apps=]", [=reject=] |promise| with a "{{SecurityError}}" {{DOMException}} and return |promise|.
 
-1. If |document| is a [=sub-app document=], [=reject=] |promise| with a "{{NotSupportedError}}" {{DOMException}} and return |promise|.
+1. If |document| is a [=Document/sub-app document=], [=reject=] |promise| with a "{{NotSupportedError}}" {{DOMException}} and return |promise|.
 
 1. Let |parsedUrls| be an empty list.
 
@@ -132,13 +132,13 @@ The {{SubApps/add(install_paths)}} method steps are:
 
     1. If |installPath| is not a [=valid relative path=] for |document|, [=reject=] |promise| with a "{{TypeError}}" {{DOMException}} and return |promise|.
 
-    1. Let |absoluteUrl| be the result of parsing |installPath| with |document|'s [=origin=] as the base URL.
+    1. Let |absoluteUrl| be the result of parsing |installPath| with |document|'s [=Document/origin=] as the base URL.
 
     1. If |absoluteUrl| is failure, [=reject=] |promise| with a "{{TypeError}}" {{DOMException}} and return |promise|.
 
     1. Append |absoluteUrl| to |parsedUrls|.
 
-1. Let |parentApp| be |document|'s [=associated parent app=].
+1. Let |parentApp| be |document|'s [=Document/associated parent app=].
 
 1. If |parentApp| is null, [=reject=] |promise| with a "{{NotSupportedError}}" {{DOMException}} and return |promise|.
 
@@ -212,9 +212,9 @@ The {{SubApps/remove(manifest_ids)}} method steps are:
 
 1. If |document| is not [=allowed to use=] the [=policy-controlled feature=] named "[=policy-controlled feature/sub-apps=]", [=reject=] |promise| with a "{{SecurityError}}" {{DOMException}} and return |promise|.
 
-1. If |document| is a [=sub-app document=], [=reject=] |promise| with a "{{NotSupportedError}}" {{DOMException}} and return |promise|.
+1. If |document| is a [=Document/sub-app document=], [=reject=] |promise| with a "{{NotSupportedError}}" {{DOMException}} and return |promise|.
 
-1. Let |parentApp| be |document|'s [=associated parent app=].
+1. Let |parentApp| be |document|'s [=Document/associated parent app=].
 
 1. If |parentApp| is null, [=reject=] |promise| with a "{{NotSupportedError}}" {{DOMException}} and return |promise|.
 
@@ -224,7 +224,7 @@ The {{SubApps/remove(manifest_ids)}} method steps are:
 
     1. If |manifestId| is not a [=valid relative path=] for |document|, [=reject=] |promise| with a "{{TypeError}}" {{DOMException}} and return |promise|.
 
-    1. Let |parsedUrl| be the result of parsing |manifestId| with |document|'s [=origin=] as the base URL.
+    1. Let |parsedUrl| be the result of parsing |manifestId| with |document|'s [=Document/origin=] as the base URL.
 
     1. If |parsedUrl| is failure, [=reject=] |promise| with a "{{TypeError}}" {{DOMException}} and return |promise|.
 
@@ -276,9 +276,9 @@ The {{SubApps/list()}} method steps are:
 
 1. If |document| is not [=allowed to use=] the [=policy-controlled feature=] named "[=policy-controlled feature/sub-apps=]", [=reject=] |promise| with a "{{SecurityError}}" {{DOMException}} and return |promise|.
 
-1. If |document| is a [=sub-app document=], [=reject=] |promise| with a "{{NotSupportedError}}" {{DOMException}} and return |promise|.
+1. If |document| is a [=Document/sub-app document=], [=reject=] |promise| with a "{{NotSupportedError}}" {{DOMException}} and return |promise|.
 
-1. Let |parentApp| be |document|'s [=associated parent app=].
+1. Let |parentApp| be |document|'s [=Document/associated parent app=].
 
 1. If |parentApp| is null, [=reject=] |promise| with a "{{NotSupportedError}}" {{DOMException}} and return |promise|.
 
