@@ -44,8 +44,6 @@ An [=installed web application=] has an associated <dfn for="installed web appli
 
 A {{Document}} has an <dfn for=Document>associated installed web application</dfn>, which is the [=installed web application=] that the {{Document}} is presented as part of. The exact mechanism for this association is [=implementation-defined=].
 
-The <dfn for=Document>associated parent app</dfn> of a {{Document}} |document| is its [=Document/associated installed web application=]'s [=installed web application/parent app=] if that is not null, or its [=Document/associated installed web application=] otherwise.
-
 A {{Document}} is a <dfn for=Document>sub-app document</dfn> if it has an [=Document/associated installed web application=] and its [=Document/associated installed web application=]'s [=installed web application/parent app=] is not null.
 
 Extensions to the {{Window}} interface {#window-extensions}
@@ -110,7 +108,7 @@ A string |path| is a <dfn>valid relative path</dfn> for a {{Document}} |document
 
 1. |path| does not start with `"//"`.
 
-1. The result of [=parse a url|parsing=] |path| with |document|'s [=Document/origin=] as the base URL is not failure.
+1. The result of [=parse a url|parsing=] |path| with |document|'s [=document base URL=] as the base URL is not failure.
 
 ## {{SubApps/add()}} method ## {#subapps-add}
 
@@ -132,7 +130,7 @@ The {{SubApps/add(install_paths)}} method steps are:
 
     1. If |installPath| is not a [=valid relative path=] for |document|, [=reject=] |promise| with a "{{TypeError}}" {{DOMException}} and return |promise|.
 
-    1. Let |absoluteUrl| be the result of parsing |installPath| with |document|'s [=Document/origin=] as the base URL.
+    1. Let |absoluteUrl| be the result of [=parse a url|parsing=] |installPath| with |document|'s [=document base URL=] as the base URL.
 
     1. If |absoluteUrl| is failure, [=reject=] |promise| with a "{{TypeError}}" {{DOMException}} and return |promise|.
 
@@ -220,7 +218,7 @@ The {{SubApps/remove(manifest_ids)}} method steps are:
 
     1. If |manifestId| is not a [=valid relative path=] for |document|, [=reject=] |promise| with a "{{TypeError}}" {{DOMException}} and return |promise|.
 
-    1. Let |parsedUrl| be the result of parsing |manifestId| with |document|'s [=Document/origin=] as the base URL.
+    1. Let |parsedUrl| be the result of [=parse a url|parsing=] |manifestId| with |document|'s [=document base URL=] as the base URL.
 
     1. If |parsedUrl| is failure, [=reject=] |promise| with a "{{TypeError}}" {{DOMException}} and return |promise|.
 
