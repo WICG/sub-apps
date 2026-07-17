@@ -2,6 +2,8 @@
 
 ## Background & Introduction
 
+There's [unnoficial draft of the Specification](https://wicg.github.io/sub-apps).
+
 The [Isolated Web Apps](https://github.com/WICG/isolated-web-apps/blob/main/README.md) (IWA) proposal defines a security model and distribution packaging system (Signed Web Bundles) that enables web applications to run with heightened security privileges and offline robustness. However, a single packaged installation does not always map neatly to the diverse, modular applications a developer needs to present to a user.
 
 Developers frequently want to deliver:
