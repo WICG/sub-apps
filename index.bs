@@ -140,7 +140,9 @@ The {{SubApps/add(install_paths)}} method steps are:
 
 1. Let |currentSubAppsCount| be the [=set/size|size=] of |parentApp|'s [=installed web application/sub-apps set=].
 
-1. If |currentSubAppsCount| + {{SubApps/add(install_paths)/install_paths}}'s [=list/size=] is greater than 20, [=reject=] |promise| with a "{{QuotaExceededError}}" {{DOMException}} and return |promise|.
+1. If {{SubApps/add(install_paths)/install_paths}}'s [=list/size=] is greater than 20, [=reject=] |promise| with a "{{QuotaExceededError}}" {{DOMException}} and return |promise|.
+
+1. If |currentSubAppsCount| + {{SubApps/add(install_paths)/install_paths}}'s [=list/size=] is greater than 50, [=reject=] |promise| with a "{{QuotaExceededError}}" {{DOMException}} and return |promise|.
 
 1. Let |subApps| be [=this=].
 
@@ -335,8 +337,11 @@ Sub-apps have the ability to register their own OS integrations (such as protoco
 This is mitigated by the fact that most operating system integrations require explicit user approval (for example, choosing the sub-app as the default application for a file type) before they become active.
 
 ## Quota and Limits ## {#quota-limits}
-To protect the host operating system and the user's application launcher from potential exhaustion or abuse, the platform enforces a hard limit of **20 installed sub-apps** per parent application.
-If a batch installation call exceeds the platform limit, the entire {{SubApps/add()}} call rejects with a "{{QuotaExceededError}}" {{DOMException}}.
+To protect the host operating system and the user's application launcher from potential exhaustion or abuse, the platform enforces two limits:
+1. A hard limit of **50 installed sub-apps** per parent application.
+2. A limit of **20 sub-apps** that can be installed per single permission prompt.
+
+If a batch installation call exceeds the platform limits, the entire {{SubApps/add()}} call rejects with a "{{QuotaExceededError}}" {{DOMException}}.
 
 Integrations {#integrations}
 ============================

@@ -345,9 +345,13 @@ Notable web manifest properties are OS Integrations:
 - **Scope extensions**: Allow a sub app to capture `https://` links that are associated with developer origin websites ([Scope Extensions](https://wicg.github.io/manifest-incubations/#scope_extensions-member)).
 
 ### Quota & Limits
-To protect the host operating system and the user's application launcher from potential exhaustion or abuse, the platform enforces a hard limit of **20 installed sub-apps** per parent IWA.
+To protect the host operating system and the user's application launcher from potential exhaustion or abuse, the platform enforces two limits:
+- **Total Limit**: A hard limit of **50 installed sub-apps** per parent IWA.
+- **Per-Prompt Limit**: A limit of **20 sub-apps** that can be installed per single permission prompt.
+
 - **Why a total limit**: Malicious or runaway applications could easily flood the user's operating system with hundreds of sub-apps. Enforcing a per-call or per-prompt limit would fail to prevent this, as developers could simply trigger successive permission prompts.
-- **Quota Rejection**: If a batch installation call exceeds the platform limit, the entire `add()` call rejects with a `QuotaExceededError` DOMException.
+- **Why a per-prompt limit**: To prevent overwhelming the user with a permission prompt containing too many apps that are not possible to review in one go.
+- **Quota Rejection**: If a batch installation call exceeds the platform limits, the entire `add()` call rejects with a `QuotaExceededError` DOMException.
 
 ## Considered Alternatives
 
